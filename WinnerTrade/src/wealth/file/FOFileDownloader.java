@@ -20,7 +20,7 @@ public class FOFileDownloader {
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("ddMMMYYYY");
 		
 		Calendar cal = Calendar.getInstance();
-		//cal.add(Calendar.DATE, -1);
+		//cal.add(Calendar.DATE, -2);
 		
 		String prefix = simpleDateFormat.format(cal.getTime());
 		

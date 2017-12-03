@@ -1,4 +1,4 @@
-set BASE_DIR=C:/Documents/Workspace/WinnerTrade
+set BASE_DIR=C:/Users/Jayander/git/MillionMaker/WinnerTrade
 
 del %BASE_DIR%/history/cm*.zip
 
