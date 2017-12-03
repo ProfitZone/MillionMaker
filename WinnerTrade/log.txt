@@ -1,0 +1,47 @@
+rm: /Users/jayanderk/Documents/Personal/Workspace/WinnerTrade/history/cm*.zip: No such file or directory
+Deleted old zips
+https://www.nseindia.com/content/historical/EQUITIES/2017/JAN/cm11JAN2017bhav.csv.zip
+java.net.UnknownHostException: www.nseindia.com
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:184)
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+	at java.net.Socket.connect(Socket.java:589)
+	at sun.security.ssl.SSLSocketImpl.connect(SSLSocketImpl.java:668)
+	at sun.security.ssl.BaseSSLSocketImpl.connect(BaseSSLSocketImpl.java:173)
+	at sun.net.NetworkClient.doConnect(NetworkClient.java:180)
+	at sun.net.www.http.HttpClient.openServer(HttpClient.java:432)
+	at sun.net.www.http.HttpClient.openServer(HttpClient.java:527)
+	at sun.net.www.protocol.https.HttpsClient.<init>(HttpsClient.java:264)
+	at sun.net.www.protocol.https.HttpsClient.New(HttpsClient.java:367)
+	at sun.net.www.protocol.https.AbstractDelegateHttpsURLConnection.getNewHttpClient(AbstractDelegateHttpsURLConnection.java:191)
+	at sun.net.www.protocol.http.HttpURLConnection.plainConnect0(HttpURLConnection.java:1105)
+	at sun.net.www.protocol.http.HttpURLConnection.plainConnect(HttpURLConnection.java:999)
+	at sun.net.www.protocol.https.AbstractDelegateHttpsURLConnection.connect(AbstractDelegateHttpsURLConnection.java:177)
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1513)
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1441)
+	at java.net.HttpURLConnection.getResponseCode(HttpURLConnection.java:480)
+	at sun.net.www.protocol.https.HttpsURLConnectionImpl.getResponseCode(HttpsURLConnectionImpl.java:338)
+	at wealth.file.HttpDownloadUtility.downloadFile(HttpDownloadUtility.java:37)
+	at wealth.file.HttpDownloadUtility.main(HttpDownloadUtility.java:114)
+File downloaded
+unzip:  cannot find or open /Users/jayanderk/Documents/Personal/Workspace/WinnerTrade/history/cm*.zip, /Users/jayanderk/Documents/Personal/Workspace/WinnerTrade/history/cm*.zip.zip or /Users/jayanderk/Documents/Personal/Workspace/WinnerTrade/history/cm*.zip.ZIP.
+
+No zipfiles found.
+File unzipped
+rm: /Users/jayanderk/Documents/Personal/Workspace/WinnerTrade/history/cm*.zip: No such file or directory
+Deleted today zip
+[11-Jan-17] - ========== Stocks Above 50 day moving average ==========
+[11-Jan-17] - HITECHPLAS-175.35
+[11-Jan-17] - PENIND-44.8
+[11-Jan-17] - ========== Stocks Above 200 day moving average ==========
+[11-Jan-17] - HITECHPLAS-175.35
+[11-Jan-17] - LIBERTSHOE-176.85
+[11-Jan-17] - SUPREMEINF-103.7
+[11-Jan-17] - ========== AccumulationWinner ==========
+[11-Jan-17] - ========== Stocks just above 50 day moving average ==========
+[11-Jan-17] - TEXINFRA-42.5-[59.52902]
+[11-Jan-17] - NH-340.0-[130.51985]
+[11-Jan-17] - ========== Stocks just above 200 day moving average ==========
+[11-Jan-17] - MUTHOOTFIN-289.05-[115.026405]
+[11-Jan-17] - JAGRAN-179.05-[-41.287327]
+[11-Jan-17] - VIKASECO-16.0-[87.58935]
+[11-Jan-17] - TALWALKARS-235.75-[164.55392]
