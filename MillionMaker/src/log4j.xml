@@ -13,18 +13,48 @@
 	<appender name="file" class="org.apache.log4j.DailyRollingFileAppender">
 	    <param name="append" value="true" />
 	    <param name="DatePattern" value="'.'dd-MM-yyyy" />
-	    <param name="maxBackupIndex" value="10" />
 	    <param name="file" value="C:/Users/Jayander/Dropbox/Million/logs/million.log" />
 	    <layout class="org.apache.log4j.PatternLayout">
 		<param name="ConversionPattern"
 			value="%d{dd-MM-yyyy HH:mm:ss} %-5p %c{1} - %m%n" />
 	    </layout>
 	</appender>
+	
+	<appender name="debugLog" class="org.apache.log4j.DailyRollingFileAppender">
+	    <param name="append" value="true" />
+	    <param name="DatePattern" value="'.'dd-MM-yyyy" />
+	    <param name="file" value="C:/Users/Jayander/Dropbox/Million/logs/millionDebug.log" />
+	    <layout class="org.apache.log4j.PatternLayout">
+		<param name="ConversionPattern"
+			value="%d{dd-MM-yyyy HH:mm:ss} %-5p %c{1} - %m%n" />
+	    </layout>
+	</appender>
+	
+	<appender name="catchAllLog" class="org.apache.log4j.DailyRollingFileAppender">
+	    <param name="append" value="true" />
+	    <param name="DatePattern" value="'.'dd-MM-yyyy" />
+	    <param name="file" value="C:/Users/Jayander/Dropbox/Million/logs/catchAllLog.log" />
+	    <layout class="org.apache.log4j.PatternLayout">
+		<param name="ConversionPattern"
+			value="%d{dd-MM-yyyy HH:mm:ss} %-5p %c{1} - %m%n" />
+	    </layout>
+	</appender>
 
-	<root>
-		<level value="INFO" />
-		<appender-ref ref="console" />
+    <logger name="com.million.AlertManager">
+    	<level value="INFO" />
+    	<appender-ref ref="console" />
 		<appender-ref ref="file" />
+   	</logger>
+   	
+   	
+   	 <logger name="com.million">
+    	<level value="DEBUG" />
+    	<appender-ref ref="debugLog" />
+   	</logger>
+   	
+	<root>
+		<level value="DEBUG" />
+		<appender-ref ref="catchAllLog"/>
 	</root>
 
 </log4j:configuration>

@@ -79,7 +79,7 @@ public class AlertManager {
 				String []values = line.split(",");
 				String scripName = values[0].trim();
 				
-				logger.info("Added " + scripName + " to list.");
+				logger.debug("Added " + scripName + " to list.");
 				scripNameList.add(scripName);
 				
 			}
@@ -139,10 +139,12 @@ public class AlertManager {
 					continue;
 				}
 				
-				logger.info(scripName + " has LTP - " + quote.lastPrice);
+				logger.debug(scripName + " has LTP - " + quote.lastPrice);
+				
+				String action = values.length >= 3 ? " Go for " + values[2] : "";
 				
 				if(isLTPWithinRange(quote.lastPrice , recoPrice))	{
-					logger.info(scripName + " has LTP " + quote.lastPrice + " within range " + recoPrice);
+					logger.info(scripName + " has LTP " + quote.lastPrice + " within range " + recoPrice + action);
 					foundScrips = foundScrips + scripName +",";
 				}
 			}

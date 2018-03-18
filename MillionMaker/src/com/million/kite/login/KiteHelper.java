@@ -16,6 +16,7 @@ import com.rainmatter.kitehttp.SessionExpiryHook;
 import com.rainmatter.kitehttp.exceptions.KiteException;
 import com.rainmatter.models.Instrument;
 import com.rainmatter.models.LTPQuote;
+import com.rainmatter.models.Order;
 
 public class KiteHelper {
 
@@ -61,7 +62,7 @@ public class KiteHelper {
         for(Instrument instrument : instruments)	{
         	
         	if("NSE".equals(instrument.getSegment()))	{
-        		logger.info("Instrument name is - " + instrument.getSegment() + " - " +
+        		logger.debug("Instrument name is - " + instrument.getSegment() + " - " +
         				instrument.getTradingsymbol());
         	}
         }
@@ -79,7 +80,11 @@ public class KiteHelper {
     	
     	int i = 0;
     	for(String scripName : scripNames){
-    		instruments[i++] = "NSE:"+scripName;
+    		if(scripName.contains("NIFTY"))	{
+    			instruments[i++] = "NFO:"+scripName;
+    		}else	{
+    			instruments[i++] = "NSE:"+scripName;
+    		}
     	}
     	
     	Map<String, LTPQuote> zerodhaMap = kiteConnect.getLTP(instruments);
@@ -89,27 +94,93 @@ public class KiteHelper {
     	
     	while(keys.hasNext())	{
     		String prefixedName = keys.next();
-    		logger.info("Retrieved LTP from zerodha - " +prefixedName);
+    		logger.debug("Retrieved LTP from zerodha - " +prefixedName);
     		resultMap.put(prefixedName.replace("NSE:", ""), zerodhaMap.get(prefixedName));
+    		resultMap.put(prefixedName.replace("NFO:", ""), zerodhaMap.get(prefixedName));
     		
     	}
-    	logger.info("Retrieved LTP for - " + resultMap.size());
+    	logger.debug("Retrieved LTP for - " + resultMap.size());
 		return resultMap;	
 	}
 	
+    /**
+     * Place normal After market order.
+     * 
+     * @param exchange
+     * @param stockName
+     * @param transactionType
+     * @param price
+     * @param quantity
+     * @throws KiteException
+     */
+    public Order placeNormalAMOOrder(String exchange,String stockName,String transactionType, 
+    		float price, int quantity) throws KiteException {
+        
+       return this.placeOrder(exchange, stockName, "LIMIT", "CNC", transactionType, price, quantity, 0, "amo");
+    } 
+
+    /**
+     * Place normal After market order.
+     * 
+     * @param exchange
+     * @param stockName
+     * @param transactionType
+     * @param price
+     * @param quantity
+     * @throws KiteException
+     */
+    public Order placeSLSellOrder(String exchange,String stockName,
+    		float price, int quantity,float triggerPrice) throws KiteException {
+        
+       return this.placeOrder(exchange, stockName, "LIMIT", "CNC", "SELL", price, quantity, triggerPrice, "regular");
+    } 
+    
+    public Order placeOrder(String exchange,String stockName,String orderType,String productTye,
+    		String transactionType, float price, int quantity,float triggerPrice, String RegularBOAMO) throws KiteException {
+        
+        Map<String, Object> param = new HashMap<String, Object>(){
+            {
+                put("quantity", ""+quantity);
+                
+                //put("order_type", "LIMIT");
+                put("order_type", orderType);
+                
+                //put("tradingsymbol", "ASHOKLEY");
+                put("tradingsymbol", stockName);
+                
+                //put("product", "CNC");
+                put("product", productTye);
+                
+                //put("exchange", "NSE");
+                put("exchange", exchange);
+                
+                //put("transaction_type", "BUY");
+                put("transaction_type", transactionType);
+                
+                put("validity", "DAY");
+                
+                //put("price", "118.50");
+                put("price", ""+price);
+                
+                //put("trigger_price", "0");
+                put("trigger_price", ""+triggerPrice);
+                
+                //put("tag", "myTag");   //tag is optional and it cannot be more than 8 characters and only alphanumeric is allowed
+            }
+        };
+        Order order = kiteConnect.placeOrder(param, RegularBOAMO);
+        
+        System.out.println(order.orderId);
+        logger.debug("Placed order for [" + order.tradingSymbol + "] ["  + order.transactionType 
+        		+"] , Order status message is [" + order.statusMessage +"]");
+        
+        return order;
+    }
+    
 	public static void main(String[] args) throws FileNotFoundException, IOException, KiteException {
 		KiteHelper kiteHelper = new KiteHelper();
 		
-		Map<String, LTPQuote> resultMap = kiteHelper.getLTP("INFY","TCS");
-		
-		Iterator<String> keys = resultMap.keySet().iterator();
-    	
-    	while(keys.hasNext())	{
-    		String name = keys.next();
-    		
-    		logger.info("LTP of "+ name + " is " + resultMap.get(name).lastPrice);
-    		
-    	}
+		kiteHelper.placeNormalAMOOrder("NSE", "ESCORTS", "BUY", 825, 10);
 	}
 
 }

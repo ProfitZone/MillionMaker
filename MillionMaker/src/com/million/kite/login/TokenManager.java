@@ -20,6 +20,19 @@ public class TokenManager {
 	
 	private static Logger logger = Logger.getLogger(TokenManager.class);
 	
+	private String userID = "SJ0899";
+	
+	public TokenManager()	{
+		
+	}
+	/**
+	 * Kite user ID
+	 * @param userID
+	 */
+	public TokenManager(String userID)	{
+		
+		this.userID = userID;
+	}
 	public void getAndStoreAccessTokens() throws Exception, KiteException	{
 		
 		WealthConfig wealthConfig = WealthConfig.getInstance();
@@ -28,7 +41,7 @@ public class TokenManager {
 		KiteConnect kiteConnect = new KiteConnect(wealthConfig.getProperty("API_KEY"));
 		
 		// set userId
-        kiteConnect.setUserId(wealthConfig.getProperty("USER_NAME"));
+        kiteConnect.setUserId(this.userID);
         
         kiteConnect.registerHook(new SessionExpiryHook() {
             @Override
@@ -55,11 +68,11 @@ public class TokenManager {
 		String tokenFile = "";
 		
 		if(tokenType == TokenType.REQUEST)	{
-			tokenFile = wealthConfig.getProperty("REQUEST_TOKEN_FILE");
+			tokenFile = this.userID + "." + wealthConfig.getProperty("REQUEST_TOKEN_FILE");
 		}else if ((tokenType == TokenType.ACCESS))	{
-			tokenFile = wealthConfig.getProperty("ACCESS_TOKEN_FILE");
+			tokenFile = this.userID + "." + wealthConfig.getProperty("ACCESS_TOKEN_FILE");
 		}else if ((tokenType == TokenType.PUBLIC))	{
-			tokenFile = wealthConfig.getProperty("PUBLIC_TOKEN_FILE");
+			tokenFile = this.userID + "." + wealthConfig.getProperty("PUBLIC_TOKEN_FILE");
 		}
 		
 		try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(
@@ -78,11 +91,11 @@ public class TokenManager {
 		String tokenFile = "";
 		
 		if(tokenType == TokenType.REQUEST)	{
-			tokenFile = wealthConfig.getProperty("REQUEST_TOKEN_FILE");
+			tokenFile = this.userID + "." + wealthConfig.getProperty("REQUEST_TOKEN_FILE");
 		}else if ((tokenType == TokenType.ACCESS))	{
-			tokenFile = wealthConfig.getProperty("ACCESS_TOKEN_FILE");
+			tokenFile = this.userID + "." + wealthConfig.getProperty("ACCESS_TOKEN_FILE");
 		}else if ((tokenType == TokenType.PUBLIC))	{
-			tokenFile = wealthConfig.getProperty("PUBLIC_TOKEN_FILE");
+			tokenFile = this.userID + "." + wealthConfig.getProperty("PUBLIC_TOKEN_FILE");
 		}
 		
 		try (BufferedReader reader = new BufferedReader(new FileReader(new File(
@@ -96,7 +109,13 @@ public class TokenManager {
 	
 	public static void main(String[] args) throws Exception, KiteException {
 		
-		TokenManager tokenManager = new TokenManager();
+		TokenManager tokenManager = null;
+		
+		if(args.length > 1)	{
+			tokenManager = new TokenManager(args[0]);
+		}else	{
+			tokenManager = new TokenManager();
+		}
 		
 		tokenManager.getAndStoreAccessTokens();
 		
