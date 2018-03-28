@@ -1,13 +1,14 @@
-set BASE_DIR=C:/Documents/Workspace/MillionMaker
+set BASE_DIR=C:/Users/Jayander/git/MillionMaker/MillionMaker
 
 set CLASSPATH=%CLASSPATH%/;%BASE_DIR%/bin;%BASE_DIR%/lib/*
 
 cd %BASE_DIR%
 
-set request_token=%1
+set userID=%1
+set request_token=%2
 
 echo on
 
-echo %request_token%>C:/Users/Jayander/Dropbox/Million/KiteTokens/request.token
+echo %request_token%>C:/Users/Jayander/Dropbox/Million/KiteTokens/%userID%.request.token
 
-java com.million.kite.login.TokenManager
+java com.million.kite.login.TokenManager %userID%

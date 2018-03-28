@@ -1,2 +1,2 @@
 echo on 
-echo "" >C:/Documents/Workspace/MillionMaker/stop
+echo "" >C:/Users/Jayander/git/MillionMaker/MillionMaker/stop

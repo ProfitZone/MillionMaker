@@ -132,7 +132,7 @@ public class KiteHelper {
     public Order placeSLSellOrder(String exchange,String stockName,
     		float price, int quantity,float triggerPrice) throws KiteException {
         
-       return this.placeOrder(exchange, stockName, "LIMIT", "CNC", "SELL", price, quantity, triggerPrice, "regular");
+       return this.placeOrder(exchange, stockName, "SL", "CNC", "SELL", price, quantity, triggerPrice, "regular");
     } 
     
     public Order placeOrder(String exchange,String stockName,String orderType,String productTye,
