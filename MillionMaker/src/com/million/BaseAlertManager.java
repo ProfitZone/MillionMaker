@@ -88,6 +88,10 @@ public class BaseAlertManager {
 				}
 				checkAndAlert();
 				
+				if(runCount >= noOfIterations)	{
+					break;
+				}
+					
 				Thread.sleep(1000 * 60 * interval);
 				
 			}

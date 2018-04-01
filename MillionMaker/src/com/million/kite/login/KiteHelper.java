@@ -170,7 +170,7 @@ public class KiteHelper {
         };
         Order order = kiteConnect.placeOrder(param, RegularBOAMO);
         
-        System.out.println(order.orderId);
+       // System.out.println(order.orderId);
         logger.debug("Placed order for [" + order.tradingSymbol + "] ["  + order.transactionType 
         		+"] , Order status message is [" + order.statusMessage +"]");
         
