@@ -15,8 +15,8 @@ import com.million.gui.DisplayManager;
 import com.million.kite.login.KiteHelper;
 import com.million.kite.login.TokenManager;
 import com.million.sound.SoundProducer;
-import com.rainmatter.kitehttp.exceptions.KiteException;
-import com.rainmatter.models.LTPQuote;
+import com.zerodhatech.kiteconnect.kitehttp.exceptions.KiteException;
+import com.zerodhatech.models.LTPQuote;
 
 
 public class AlertManager {

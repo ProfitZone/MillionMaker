@@ -1,6 +1,7 @@
 package com.million;
 
 import java.io.BufferedReader;
+
 import java.io.File;
 import java.io.FileReader;
 
@@ -8,7 +9,7 @@ import org.apache.log4j.Logger;
 
 import com.million.config.WealthConfig;
 import com.million.kite.login.KiteHelper;
-import com.rainmatter.kitehttp.exceptions.KiteException;
+import com.zerodhatech.kiteconnect.kitehttp.exceptions.KiteException;
 
 public class StopLossManager {
 

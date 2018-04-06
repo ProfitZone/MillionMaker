@@ -1,17 +1,15 @@
 package com.million.sample;
 
-import com.million.kite.login.TokenManager;
-import com.million.kite.login.TokenType;
-import com.neovisionaries.ws.client.WebSocketException;
-import com.rainmatter.kiteconnect.KiteConnect;
-import com.rainmatter.kitehttp.SessionExpiryHook;
-import com.rainmatter.kitehttp.exceptions.KiteException;
-import com.rainmatter.models.UserModel;
-import org.json.JSONException;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
+
+import org.json.JSONException;
+
+import com.million.kite.login.TokenManager;
+import com.million.kite.login.TokenType;
+import com.zerodhatech.kiteconnect.KiteConnect;
+import com.zerodhatech.kiteconnect.kitehttp.SessionExpiryHook;
+import com.zerodhatech.kiteconnect.kitehttp.exceptions.KiteException;
 
 /**
  * Created by sujith on 7/10/16.
@@ -29,12 +27,15 @@ public class Test {
                 // set userId
                 kiteConnect.setUserId("SJ0899");
 
+                //Enable logs for debugging purpose. This will log request and response.
+                kiteConnect.setEnableLogging(true);
+                
                 // Get login url
-                String url = kiteConnect.getLoginUrl();
+                String url = kiteConnect.getLoginURL();
 
                 System.out.println(url);
                 // Set session expiry callback.
-                kiteConnect.registerHook(new SessionExpiryHook() {
+                kiteConnect.setSessionExpiryHook(new SessionExpiryHook() {
                     @Override
                     public void sessionExpired() {
                         System.out.println("session expired");

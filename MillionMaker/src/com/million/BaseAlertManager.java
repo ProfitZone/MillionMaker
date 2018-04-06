@@ -14,8 +14,8 @@ import org.apache.log4j.Logger;
 import com.million.config.WealthConfig;
 import com.million.kite.login.KiteHelper;
 import com.million.kite.login.TokenManager;
-import com.rainmatter.kitehttp.exceptions.KiteException;
-import com.rainmatter.models.LTPQuote;
+import com.zerodhatech.kiteconnect.kitehttp.exceptions.KiteException;
+import com.zerodhatech.models.LTPQuote;
 
 public class BaseAlertManager {
 

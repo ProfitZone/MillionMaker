@@ -11,10 +11,10 @@ import java.io.IOException;
 import org.apache.log4j.Logger;
 
 import com.million.config.WealthConfig;
-import com.rainmatter.kiteconnect.KiteConnect;
-import com.rainmatter.kitehttp.SessionExpiryHook;
-import com.rainmatter.kitehttp.exceptions.KiteException;
-import com.rainmatter.models.UserModel;
+import com.zerodhatech.kiteconnect.KiteConnect;
+import com.zerodhatech.kiteconnect.kitehttp.SessionExpiryHook;
+import com.zerodhatech.kiteconnect.kitehttp.exceptions.KiteException;
+import com.zerodhatech.models.User;
 
 public class TokenManager {
 	
@@ -43,7 +43,7 @@ public class TokenManager {
 		// set userId
         kiteConnect.setUserId(this.userID);
         
-        kiteConnect.registerHook(new SessionExpiryHook() {
+        kiteConnect.setSessionExpiryHook(new SessionExpiryHook() {
             @Override
             public void sessionExpired() {
                 System.out.println("session expired");
@@ -53,11 +53,15 @@ public class TokenManager {
         logger.info("Request token - " + getToken(TokenType.REQUEST));
         //First parameter is request_token, it is obtained by login to https://kite.trade/connect/login?api_key=byxwwjusrsbt88yi
         //Second parameter is API secret
-        UserModel userModel =  kiteConnect.requestAccessToken(getToken(TokenType.REQUEST), wealthConfig.getProperty("API_SECRET"));
+        //UserModel userModel =  kiteConnect.requestAccessToken(getToken(TokenType.REQUEST), wealthConfig.getProperty("API_SECRET"));
         
-        saveToken(userModel.accessToken , TokenType.ACCESS);
+        User user =  kiteConnect.generateSession(getToken(TokenType.REQUEST), wealthConfig.getProperty("API_SECRET"));
+        //kiteConnect.setAccessToken(user.accessToken);
+        //kiteConnect.setPublicToken(user.publicToken);
         
-        saveToken(userModel.publicToken , TokenType.PUBLIC); 
+        saveToken(user.accessToken , TokenType.ACCESS);
+        
+        saveToken(user.publicToken , TokenType.PUBLIC); 
         
 	}
 

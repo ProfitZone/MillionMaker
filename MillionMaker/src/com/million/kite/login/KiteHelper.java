@@ -8,15 +8,18 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.million.config.WealthConfig;
-import com.rainmatter.kiteconnect.KiteConnect;
-import com.rainmatter.kitehttp.SessionExpiryHook;
-import com.rainmatter.kitehttp.exceptions.KiteException;
-import com.rainmatter.models.Instrument;
-import com.rainmatter.models.LTPQuote;
-import com.rainmatter.models.Order;
+import com.zerodhatech.kiteconnect.KiteConnect;
+import com.zerodhatech.kiteconnect.kitehttp.SessionExpiryHook;
+import com.zerodhatech.kiteconnect.kitehttp.exceptions.KiteException;
+import com.zerodhatech.kiteconnect.utils.Constants;
+import com.zerodhatech.models.Instrument;
+import com.zerodhatech.models.LTPQuote;
+import com.zerodhatech.models.Order;
+import com.zerodhatech.models.OrderParams;
 
 public class KiteHelper {
 
@@ -34,7 +37,7 @@ public class KiteHelper {
         kiteConnect.setUserId(wealthConfig.getProperty("USER_NAME"));
 
         // Set session expiry callback.
-        kiteConnect.registerHook(new SessionExpiryHook() {
+        kiteConnect.setSessionExpiryHook(new SessionExpiryHook() {
             @Override
             public void sessionExpired() {
                 System.out.println("session expired");
@@ -68,14 +71,14 @@ public class KiteHelper {
         }
     }
     
-    public void logout() throws KiteException	{
+    public void logout() throws KiteException, JSONException, IOException	{
     	/** Logout user and kill session. */
         JSONObject jsonObject = kiteConnect.logout();
         
         logger.info("logged out - " + jsonObject.toString());
     }
 	
-    public Map<String,LTPQuote>getLTP(String ... scripNames) throws KiteException	{
+    public Map<String,LTPQuote>getLTP(String ... scripNames) throws KiteException, JSONException, IOException	{
     	String[] instruments = new String[scripNames.length];
     	
     	int i = 0;
@@ -112,9 +115,11 @@ public class KiteHelper {
      * @param price
      * @param quantity
      * @throws KiteException
+     * @throws IOException 
+     * @throws JSONException 
      */
     public Order placeNormalAMOOrder(String exchange,String stockName,String transactionType, 
-    		float price, int quantity) throws KiteException {
+    		float price, int quantity) throws KiteException, JSONException, IOException {
         
        return this.placeOrder(exchange, stockName, "LIMIT", "CNC", transactionType, price, quantity, 0, "amo");
     } 
@@ -128,47 +133,33 @@ public class KiteHelper {
      * @param price
      * @param quantity
      * @throws KiteException
+     * @throws IOException 
+     * @throws JSONException 
      */
     public Order placeSLSellOrder(String exchange,String stockName,
-    		float price, int quantity,float triggerPrice) throws KiteException {
+    		float price, int quantity,float triggerPrice) throws KiteException, JSONException, IOException {
         
-       return this.placeOrder(exchange, stockName, "SL", "CNC", "SELL", price, quantity, triggerPrice, "regular");
+       return this.placeOrder( Constants.EXCHANGE_NSE, stockName, Constants.ORDER_TYPE_SL,Constants.PRODUCT_CNC ,Constants.TRANSACTION_TYPE_SELL, 
+    		   price, quantity, triggerPrice, Constants.VARIETY_REGULAR);
     } 
     
-    public Order placeOrder(String exchange,String stockName,String orderType,String productTye,
-    		String transactionType, float price, int quantity,float triggerPrice, String RegularBOAMO) throws KiteException {
+    public Order placeOrder(String exchange,String stockName, String orderType,String productTye,
+    		String transactionType, float price, int quantity,float triggerPrice, String RegularBOAMO) throws KiteException, JSONException, IOException {
         
-        Map<String, Object> param = new HashMap<String, Object>(){
-            {
-                put("quantity", ""+quantity);
-                
-                //put("order_type", "LIMIT");
-                put("order_type", orderType);
-                
-                //put("tradingsymbol", "ASHOKLEY");
-                put("tradingsymbol", stockName);
-                
-                //put("product", "CNC");
-                put("product", productTye);
-                
-                //put("exchange", "NSE");
-                put("exchange", exchange);
-                
-                //put("transaction_type", "BUY");
-                put("transaction_type", transactionType);
-                
-                put("validity", "DAY");
-                
-                //put("price", "118.50");
-                put("price", ""+price);
-                
-                //put("trigger_price", "0");
-                put("trigger_price", ""+triggerPrice);
-                
-                //put("tag", "myTag");   //tag is optional and it cannot be more than 8 characters and only alphanumeric is allowed
-            }
-        };
-        Order order = kiteConnect.placeOrder(param, RegularBOAMO);
+    	OrderParams orderParams = new OrderParams();
+    	
+    	orderParams.quantity = quantity;
+    	orderParams.orderType = orderType;
+    	orderParams.tradingsymbol = stockName;
+        orderParams.product = productTye; 
+        orderParams.exchange = exchange;
+        orderParams.transactionType = transactionType;
+        orderParams.validity = Constants.VALIDITY_DAY;
+        orderParams.price = (double) price;
+        orderParams.triggerPrice = (double) triggerPrice;
+         
+        
+        Order order = kiteConnect.placeOrder(orderParams, RegularBOAMO);
         
        // System.out.println(order.orderId);
         logger.debug("Placed order for [" + order.tradingSymbol + "] ["  + order.transactionType 
