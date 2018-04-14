@@ -138,30 +138,42 @@ public class BaseAlertManager {
 		
 		List<String> scripNameList = new ArrayList<>();
 		
-		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(
-				new File(parametersMap.get(INPUT_FILE_PARAMETER))))){
-			
-			String line;
-			
-			while ((line = bufferedReader.readLine()) != null) {
+		//handle more than one file in input
+		String files = parametersMap.get(INPUT_FILE_PARAMETER);
+		
+		String[] fileNames =  new String[1];
+		
+		if(files.contains(",")){
+			fileNames = files.split(",");
+		}else	{
+			fileNames[0] = files;
+		}
+		
+		for(String fileName : fileNames)	{
+			try (BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName))){
 				
-				if(line.startsWith("SCRIP_NAME"))	{
-					continue;
+				String line;
+				
+				while ((line = bufferedReader.readLine()) != null) {
+					
+					if(line.startsWith("SCRIP_NAME"))	{
+						continue;
+					}
+					
+					String []values = line.split(",");
+					String scripName = values[0].trim();
+					
+					logger.debug("Added " + scripName + " to list.");
+					scripNameList.add(scripName);
+					
 				}
 				
-				String []values = line.split(",");
-				String scripName = values[0].trim();
-				
-				logger.debug("Added " + scripName + " to list.");
-				scripNameList.add(scripName);
-				
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				logger.error("Exception occured ", e);
+				System.exit(-1);
 			}
-			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			logger.error("Exception occured ", e);
-			System.exit(-1);
 		}
 
 		KiteHelper kiteHelper;
@@ -189,11 +201,12 @@ public class BaseAlertManager {
 		}
 		
 		String foundScrips = "";
-		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(
-				parametersMap.get(INPUT_FILE_PARAMETER))))){
+		
+		for(String fileName : fileNames)	{
 			
+			try (BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName))){
+
 			String line;
-			
 			while ((line = bufferedReader.readLine()) != null) {
 				
 				if(line.startsWith("SCRIP_NAME"))	{
@@ -216,17 +229,25 @@ public class BaseAlertManager {
 				
 				String action = values.length >= 3 ? " Go for " + values[2] : "";
 				
+				if(values[2].contains("SHORT") && quote.lastPrice >= recoPrice)	{
+					action += " ***";
+				}
+				
+				if(values[2].contains("LONG") && quote.lastPrice <= recoPrice)	{
+					action += " ***";
+				}
+				
 				if(isLTPWithinRange(quote.lastPrice , recoPrice))	{
 					logger.info(scripName + " has LTP " + quote.lastPrice + " within range " + recoPrice + action);
 					foundScrips = foundScrips + scripName +",";
 				}
 			}
-			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			logger.error("Exception occured ", e);
-			
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				logger.error("Exception occured ", e);
+				
+			}
 		}
 	}
 

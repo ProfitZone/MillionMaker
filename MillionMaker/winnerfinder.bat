@@ -9,4 +9,4 @@ echo on
 del C:\Users\Jayander\Dropbox\Million\stop
 del C:\Users\Jayander\git\MillionMaker\MillionMaker\stop
 
-java com.million.AlertManager 16
+java com.million.BaseAlertManager -inputFile=C:/Users/Jayander/Dropbox/Million/Winners/OTA-WATCHLIST-INTRADAY.csv,C:/Users/Jayander/Dropbox/Million/Winners/OTA-WATCHLIST-WIT.csv -repeatRuns=-1 -stopAfterHours=16 -runEveryXMinutes=5 -alertRange=1
