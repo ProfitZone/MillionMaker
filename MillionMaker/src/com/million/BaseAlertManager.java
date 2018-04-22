@@ -11,6 +11,8 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import com.million.cache.ApplicationCache;
+import com.million.common.Constants;
 import com.million.config.WealthConfig;
 import com.million.kite.login.KiteHelper;
 import com.million.kite.login.TokenManager;
@@ -200,8 +202,6 @@ public class BaseAlertManager {
 			return;
 		}
 		
-		String foundScrips = "";
-		
 		for(String fileName : fileNames)	{
 			
 			try (BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName))){
@@ -238,8 +238,12 @@ public class BaseAlertManager {
 				}
 				
 				if(isLTPWithinRange(quote.lastPrice , recoPrice))	{
-					logger.info(scripName + " has LTP " + quote.lastPrice + " within range " + recoPrice + action);
-					foundScrips = foundScrips + scripName +",";
+					String loggerMessage = scripName + " has LTP " + quote.lastPrice + " within range " + recoPrice + action;
+					
+					if(!ApplicationCache.getInstance().contains(Constants.CACHE_GROUP_LOG_MESSAGES, loggerMessage))	{
+						logger.info(loggerMessage);
+						ApplicationCache.getInstance().put(Constants.CACHE_GROUP_LOG_MESSAGES, loggerMessage);
+					}
 				}
 			}
 			} catch (Exception e) {

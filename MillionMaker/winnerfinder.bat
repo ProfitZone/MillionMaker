@@ -9,4 +9,8 @@ echo on
 del C:\Users\Jayander\Dropbox\Million\stop
 del C:\Users\Jayander\git\MillionMaker\MillionMaker\stop
 
+start "Application" javaw com.million.BaseAlertManager -inputFile=C:/Users/Jayander/Dropbox/Million/Winners/OTA-WATCHLIST-NIFTY.CSV -repeatRuns=-1 -stopAfterHours=16 -runEveryXMinutes=5 -alertRange=0.25
+
+timeout 60 > nul
+
 java com.million.BaseAlertManager -inputFile=C:/Users/Jayander/Dropbox/Million/Winners/OTA-WATCHLIST-INTRADAY.csv,C:/Users/Jayander/Dropbox/Million/Winners/OTA-WATCHLIST-WIT.csv -repeatRuns=-1 -stopAfterHours=16 -runEveryXMinutes=5 -alertRange=1

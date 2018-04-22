@@ -162,8 +162,18 @@ public class KiteHelper {
         Order order = kiteConnect.placeOrder(orderParams, RegularBOAMO);
         
        // System.out.println(order.orderId);
-        logger.debug("Placed order for [" + order.tradingSymbol + "] ["  + order.transactionType 
-        		+"] , Order status message is [" + order.statusMessage +"]");
+        
+        logger.debug("Placing order\n"
+        		+ "exchange - " + orderParams.exchange + "\n"
+        		+ "tradingsymbol - " + orderParams.tradingsymbol + "\n"
+        		+ "product - " + orderParams.product + "\n"
+        		+ "orderType - " + orderParams.orderType + "\n"
+        		+ "transactionType - " + orderParams.transactionType + "\n"
+        		+ "validity - " + orderParams.validity + "\n"
+        		+ "quantity - " + orderParams.quantity + "\n"
+        		+ "price - " + orderParams.price + "\n"
+        		+ "triggerPrice - " + orderParams.triggerPrice + "\n" 
+        		);
         
         return order;
     }
@@ -171,7 +181,8 @@ public class KiteHelper {
 	public static void main(String[] args) throws FileNotFoundException, IOException, KiteException {
 		KiteHelper kiteHelper = new KiteHelper();
 		
-		kiteHelper.placeNormalAMOOrder("NSE", "ESCORTS", "BUY", 825, 10);
+		kiteHelper.placeSLSellOrder( Constants.EXCHANGE_NSE, "UFLEX",
+	    		   346, 120, 346);
 	}
 
 }
