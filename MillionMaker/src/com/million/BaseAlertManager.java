@@ -1,13 +1,10 @@
 package com.million;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -203,13 +200,21 @@ public class BaseAlertManager {
 				}
 				
 				if(isLTPWithinRange(quote.lastPrice , recoPrice))	{
-					String loggerMessage = scripName + " has LTP " + quote.lastPrice + " within range " + recoPrice + action;
+					String loggerMessage = scripName + " has LTP " + quote.lastPrice + " within range " + new DecimalFormat("#.##").format(recoPrice) + action;
 					
 					if(!ApplicationCache.getInstance().contains(Constants.CACHE_GROUP_LOG_MESSAGES, loggerMessage))	{
 						logger.info(loggerMessage);
 						ApplicationCache.getInstance().put(Constants.CACHE_GROUP_LOG_MESSAGES, loggerMessage);
 					}
 				}
+			}
+			
+			try {
+				//sleep for 15 sec after processing one file.
+				Thread.sleep(1000 * 5);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 	}
