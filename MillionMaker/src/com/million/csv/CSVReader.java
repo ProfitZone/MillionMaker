@@ -37,7 +37,7 @@ public class CSVReader {
 				String[] fields = sCurrentLine.split(Constants.COMMA_SEPERATOR);
 				Map<String, String> valueMap =  new HashMap<>();
 				
-				for(int i=0; i<headers.length; i++)	{
+				for(int i=0; i<fields.length; i++)	{
 					valueMap.put(headers[i], fields[i]);
 				}
 				

@@ -3,6 +3,7 @@ package com.million;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -14,6 +15,7 @@ import org.apache.log4j.Logger;
 import com.million.cache.ApplicationCache;
 import com.million.common.Constants;
 import com.million.config.WealthConfig;
+import com.million.csv.CSVReader;
 import com.million.kite.login.KiteHelper;
 import com.million.kite.login.TokenManager;
 import com.zerodhatech.kiteconnect.kitehttp.exceptions.KiteException;
@@ -136,9 +138,7 @@ public class BaseAlertManager {
 		
 	}
 
-	public static void checkAndAlert() {
-		
-		List<String> scripNameList = new ArrayList<>();
+	public static void checkAndAlert() throws IOException {
 		
 		//handle more than one file in input
 		String files = parametersMap.get(INPUT_FILE_PARAMETER);
@@ -152,71 +152,34 @@ public class BaseAlertManager {
 		}
 		
 		for(String fileName : fileNames)	{
-			try (BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName))){
-				
-				String line;
-				
-				while ((line = bufferedReader.readLine()) != null) {
-					
-					if(line.startsWith("SCRIP_NAME"))	{
-						continue;
-					}
-					
-					String []values = line.split(",");
-					String scripName = values[0].trim();
-					
-					logger.debug("Added " + scripName + " to list.");
-					scripNameList.add(scripName);
-					
-				}
-				
+			
+			CSVReader csvReader = new CSVReader(fileName);
+			
+			csvReader.getAllScrips();
+			KiteHelper kiteHelper;
+			
+			Map<String, LTPQuote> LTPMap = null;
+			try {
+				kiteHelper = new KiteHelper();
+				LTPMap = kiteHelper.getLTP(csvReader.getAllScrips());
+			
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				logger.error("Exception occured ", e);
 				System.exit(-1);
-			}
-		}
-
-		KiteHelper kiteHelper;
-		Map<String, LTPQuote> LTPMap = null;
-		try {
-			kiteHelper = new KiteHelper();
-			LTPMap = kiteHelper.getLTP(scripNameList.toArray(new String[0]));
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error("Exception occured ", e);
-			System.exit(-1);
-		} catch (KiteException e) {
-			e.printStackTrace();
-			logger.error("Exception occured ", e);
-			try {
-				TokenManager.main(null);
-			} catch (Exception e1) {
-				logger.error("Request token has expired");
-				
-			} catch (KiteException e1) {
-				logger.error("Request token has expired");
-			}
-			return;
-		}
-		
-		for(String fileName : fileNames)	{
-			
-			try (BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName))){
-
-			String line;
-			while ((line = bufferedReader.readLine()) != null) {
-				
-				if(line.startsWith("SCRIP_NAME"))	{
-					continue;
+			} catch (KiteException e) {
+				e.printStackTrace();
+				logger.error("Exception occured ", e);
+				try {
+					TokenManager.main(null);
+				} catch (Exception e1) {
+					logger.error("Request token has expired");
+				} catch (KiteException e1) {
+					logger.error("Request token has expired");
 				}
-				
-				String []values = line.split(",");
-				String scripName = values[0].trim();
-				
-				double recoPrice = Double.valueOf(values[1]);
+			}
+			
+			for(String scripName : csvReader.getAllScrips())	{
 				
 				LTPQuote quote = LTPMap.get(scripName);
 				
@@ -225,15 +188,17 @@ public class BaseAlertManager {
 					continue;
 				}
 				
+				double recoPrice = csvReader.getFloatValue(scripName, Constants.FIELD_NAME_ENTRY_PRICE_LEVEL);
+				
 				logger.debug(scripName + " has LTP - " + quote.lastPrice);
 				
-				String action = values.length >= 3 ? " Go for " + values[2] : "";
+				String action = " Go for " + csvReader.getValue(scripName, Constants.FIELD_NAME_OTA_TRADE_TYPE);
 				
-				if(values[2].contains("SHORT") && quote.lastPrice >= recoPrice)	{
+				if(csvReader.getValue(scripName, Constants.FIELD_NAME_OTA_TRADE_TYPE).contains("SHORT") && quote.lastPrice >= recoPrice)	{
 					action += " ***";
 				}
 				
-				if(values[2].contains("LONG") && quote.lastPrice <= recoPrice)	{
+				if(csvReader.getValue(scripName, Constants.FIELD_NAME_OTA_TRADE_TYPE).contains("LONG") && quote.lastPrice <= recoPrice)	{
 					action += " ***";
 				}
 				
@@ -245,12 +210,6 @@ public class BaseAlertManager {
 						ApplicationCache.getInstance().put(Constants.CACHE_GROUP_LOG_MESSAGES, loggerMessage);
 					}
 				}
-			}
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				logger.error("Exception occured ", e);
-				
 			}
 		}
 	}

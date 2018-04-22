@@ -33,7 +33,7 @@ public class ApplicationCache {
 		
 		Set<Object> cacheSet = cache.get(groupId);
 		
-		if(cacheObject == null)	{
+		if(cacheSet == null)	{
 			return false;
 		}
 		
