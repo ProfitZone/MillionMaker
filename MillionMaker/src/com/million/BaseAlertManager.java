@@ -3,6 +3,7 @@ package com.million;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.text.MessageFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -200,9 +201,13 @@ public class BaseAlertManager {
 				}
 				
 				if(isLTPWithinRange(quote.lastPrice , recoPrice))	{
-					String loggerMessage = scripName + " has LTP " + quote.lastPrice + " within range " + new DecimalFormat("#.##").format(recoPrice) + action;
+					//String loggerMessage = scripName + " has LTP " + quote.lastPrice + " within range " + new DecimalFormat("#.##").format(recoPrice) + action;
+					String loggerMessage = scripName + " has LTP " + "{0}" + " within range " + "{1}" + action;
 					
 					if(!ApplicationCache.getInstance().contains(Constants.CACHE_GROUP_LOG_MESSAGES, loggerMessage))	{
+						ApplicationCache.getInstance().put(Constants.CACHE_GROUP_LOG_MESSAGES, loggerMessage);
+						
+						loggerMessage = MessageFormat.format(loggerMessage, quote.lastPrice,new DecimalFormat("#.##").format(recoPrice));
 						logger.info(loggerMessage);
 						ApplicationCache.getInstance().put(Constants.CACHE_GROUP_LOG_MESSAGES, loggerMessage);
 					}
