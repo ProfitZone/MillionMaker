@@ -89,6 +89,7 @@ public class KiteHelper {
     			instruments[i++] = "NSE:"+scripName;
     		}
     	}
+    	logger.debug("Querying for - " + scripNames.length + " scrips");
     	
     	Map<String, LTPQuote> zerodhaMap = kiteConnect.getLTP(instruments);
     	Map<String, LTPQuote> resultMap = new HashMap<>();

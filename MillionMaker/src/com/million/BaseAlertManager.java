@@ -14,8 +14,10 @@ import com.million.cache.ApplicationCache;
 import com.million.common.Constants;
 import com.million.config.WealthConfig;
 import com.million.csv.CSVReader;
+import com.million.csv.CSVWritter;
 import com.million.kite.login.KiteHelper;
 import com.million.kite.login.TokenManager;
+import com.onnea.million.util.HelperUtil;
 import com.zerodhatech.kiteconnect.kitehttp.exceptions.KiteException;
 import com.zerodhatech.models.LTPQuote;
 
@@ -141,6 +143,9 @@ public class BaseAlertManager {
 		//handle more than one file in input
 		String files = parametersMap.get(INPUT_FILE_PARAMETER);
 		
+		CSVWritter trackingSheet = new CSVWritter(WealthConfig.getInstance().getProperty("HOME_DIR") 
+				+ "/Records/", "Onnea-records.csv", "DATE","STOCK-NAME","PRICE","TYPE");
+				
 		String[] fileNames =  new String[1];
 		
 		if(files.contains(",")){
@@ -182,7 +187,12 @@ public class BaseAlertManager {
 				LTPQuote quote = LTPMap.get(scripName);
 				
 				if(quote == null)	{
-					logger.error("SCRIP NOT FOUND - " + scripName);
+					
+					String loggerMessage = "SCRIP NOT FOUND - " + scripName;
+					if(!ApplicationCache.getInstance().contains(Constants.CACHE_GROUP_LOG_MESSAGES, loggerMessage))	{
+						logger.error(loggerMessage);
+						ApplicationCache.getInstance().put(Constants.CACHE_GROUP_LOG_MESSAGES, loggerMessage);
+					}
 					continue;
 				}
 				
@@ -209,6 +219,9 @@ public class BaseAlertManager {
 						
 						loggerMessage = MessageFormat.format(loggerMessage, quote.lastPrice,new DecimalFormat("#.##").format(recoPrice));
 						logger.info(loggerMessage);
+						
+						trackingSheet.write(HelperUtil.getStringDate(),scripName,""+recoPrice,csvReader.getValue(scripName, Constants.FIELD_NAME_OTA_TRADE_TYPE));
+						
 						ApplicationCache.getInstance().put(Constants.CACHE_GROUP_LOG_MESSAGES, loggerMessage);
 					}
 				}
