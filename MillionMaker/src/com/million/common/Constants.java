@@ -13,6 +13,8 @@ public interface Constants {
 	String COMMA_SEPERATOR = ",";
 
 	String CACHE_GROUP_LOG_MESSAGES = "CACHE_GROUP_LOG_MESSAGES";
+
+	String WRITE_IN_CSV = "WriteInCSV";
 	
 
 }

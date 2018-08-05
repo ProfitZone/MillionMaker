@@ -144,8 +144,14 @@ public class BaseAlertManager {
 		String files = parametersMap.get(INPUT_FILE_PARAMETER);
 		
 		CSVWritter trackingSheet = new CSVWritter(WealthConfig.getInstance().getProperty("HOME_DIR") 
-				+ "/Records/", "Onnea-records.csv", "DATE","STOCK-NAME","PRICE","TYPE");
+				+ "/Records/" , "Onnea-records.csv", "DATE","STOCK-NAME","PRICE","TYPE");
 				
+		String writeInCSV = System.getProperty(Constants.WRITE_IN_CSV);
+		
+		if("false".equalsIgnoreCase(writeInCSV)){
+			trackingSheet.setDontWrite(true);
+		}
+		
 		String[] fileNames =  new String[1];
 		
 		if(files.contains(",")){
