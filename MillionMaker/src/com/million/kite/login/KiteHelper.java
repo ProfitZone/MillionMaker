@@ -122,7 +122,7 @@ public class KiteHelper {
     public Order placeNormalAMOOrder(String exchange,String stockName,String transactionType, 
     		float price, int quantity) throws KiteException, JSONException, IOException {
         
-       return this.placeOrder(exchange, stockName, "LIMIT", "CNC", transactionType, price, quantity, 0, "amo");
+       return this.placeOrder(Constants.EXCHANGE_NSE, stockName, "LIMIT", "CNC", transactionType, price, quantity, 0,0,0, "amo");
     } 
 
     /**
@@ -140,12 +140,20 @@ public class KiteHelper {
     public Order placeSLSellOrder(String exchange,String stockName,
     		float price, int quantity,float triggerPrice) throws KiteException, JSONException, IOException {
         
-       return this.placeOrder( Constants.EXCHANGE_NSE, stockName, Constants.ORDER_TYPE_SL,Constants.PRODUCT_CNC ,Constants.TRANSACTION_TYPE_SELL, 
-    		   price, quantity, triggerPrice, Constants.VARIETY_REGULAR);
+       return this.placeOrder(exchange, stockName, Constants.ORDER_TYPE_SL,Constants.PRODUCT_CNC ,Constants.TRANSACTION_TYPE_SELL, 
+    		   price, quantity, triggerPrice,0,0, Constants.VARIETY_REGULAR);
+    } 
+    
+    public Order placeBracketOrder(String exchange,String stockName,
+    		float price, int quantity,float stoploss, float target, String TransactionType) throws KiteException, JSONException, IOException {
+        
+       return this.placeOrder(exchange, stockName, Constants.ORDER_TYPE_LIMIT,Constants.PRODUCT_MIS ,TransactionType, 
+    		   price, quantity, 0,stoploss,target, Constants.VARIETY_BO);
     } 
     
     public Order placeOrder(String exchange,String stockName, String orderType,String productTye,
-    		String transactionType, float price, int quantity,float triggerPrice, String RegularBOAMO) throws KiteException, JSONException, IOException {
+    		String transactionType, float price, int quantity,float triggerPrice,float stoploss,
+    		float squareOff, String RegularBOAMO) throws KiteException, JSONException, IOException {
         
     	OrderParams orderParams = new OrderParams();
     	
@@ -157,9 +165,15 @@ public class KiteHelper {
         orderParams.transactionType = transactionType;
         orderParams.validity = Constants.VALIDITY_DAY;
         orderParams.price = (double) price;
-        orderParams.triggerPrice = (double) triggerPrice;
-         
-        
+        if(triggerPrice != 0)	{
+        	orderParams.triggerPrice = (double) triggerPrice;
+        }
+        if(stoploss != 0){
+        	orderParams.stoploss = (double) stoploss;
+        }
+        if(squareOff != 0)	{
+        	orderParams.squareoff = (double) squareOff;
+        }
         Order order = kiteConnect.placeOrder(orderParams, RegularBOAMO);
         
        // System.out.println(order.orderId);
@@ -179,11 +193,16 @@ public class KiteHelper {
         return order;
     }
     
+    public List<Order> getOrders() throws JSONException, IOException, KiteException	{
+    	return kiteConnect.getOrders();
+    }
+    
 	public static void main(String[] args) throws FileNotFoundException, IOException, KiteException {
 		KiteHelper kiteHelper = new KiteHelper();
 		
-		kiteHelper.placeSLSellOrder( Constants.EXCHANGE_NSE, "UFLEX",
-	    		   346, 120, 346);
+		kiteHelper.placeBracketOrder("NSE","TATAMTRDVR",141.7f,588,0.85f,1.7f,"SELL");
+		
+		System.out.println("Done");
 	}
 
 }

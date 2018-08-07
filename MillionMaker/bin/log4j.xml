@@ -29,6 +29,16 @@
 			value="%d{dd-MM-yyyy HH:mm:ss} %-5p %c{1} - %m%n" />
 	    </layout>
 	</appender>
+
+	<appender name="millionFileAutoOrder" class="org.apache.log4j.DailyRollingFileAppender">
+	    <param name="append" value="true" />
+	    <param name="DatePattern" value="'.'dd-MM-yyyy" />
+	    <param name="file" value="C:/Users/Jayander/Dropbox/Million/logs/autoOrder.log" />
+	    <layout class="org.apache.log4j.PatternLayout">
+		<param name="ConversionPattern"
+			value="%d{dd-MM-yyyy HH:mm:ss} %-5p %c{1} - %m%n" />
+	    </layout>
+	</appender>	
 	
 	<appender name="debugLog" class="org.apache.log4j.DailyRollingFileAppender">
 	    <param name="append" value="true" />
@@ -60,6 +70,13 @@
     	<level value="INFO" />
     	<appender-ref ref="console" />
 		<appender-ref ref="millionFileSwing" />
+   	</logger>
+   	
+   	
+   <logger name="com.million.AutoOrderManager">
+    	<level value="INFO" />
+    	<appender-ref ref="console" />
+		<appender-ref ref="millionFileAutoOrder" />
    	</logger>
    	
    	 <logger name="com.million">

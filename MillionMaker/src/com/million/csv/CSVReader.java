@@ -90,9 +90,7 @@ public class CSVReader {
 		if(this.dataMap.get(scripName) == null)	{
 			return 0;
 		}
-		
 		return Integer.valueOf(this.dataMap.get(scripName).get(fieldName));
-		
 	}
 	
 	/**
