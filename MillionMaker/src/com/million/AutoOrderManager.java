@@ -225,7 +225,7 @@ public class AutoOrderManager {
 					continue;
 				}
 				
-				logger.info("Processing [" + scripName + "], entry price is [" + entryPrice +"], LTP is [" + quote.lastPrice + "], action is [" + action +"]" );
+				logger.debug("Processing [" + scripName + "], entry price is [" + entryPrice +"], LTP is [" + quote.lastPrice + "], action is [" + action +"]" );
 				if(isLTPWithinRange(quote.lastPrice , entryPrice))	{
 					
 					//check if order was placed and is already available is local cache.

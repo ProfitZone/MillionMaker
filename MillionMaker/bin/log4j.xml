@@ -79,6 +79,13 @@
 		<appender-ref ref="millionFileAutoOrder" />
    	</logger>
    	
+
+   <logger name="com.million.AutoOrderManager">
+    	<level value="DEBUG" />
+		
+   	</logger>
+
+   	
    	 <logger name="com.million">
     	<level value="DEBUG" />
     	<appender-ref ref="debugLog" />
