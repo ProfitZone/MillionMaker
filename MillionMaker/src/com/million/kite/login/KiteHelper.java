@@ -78,6 +78,31 @@ public class KiteHelper {
         logger.info("logged out - " + jsonObject.toString());
     }
 	
+    public Map<String,LTPQuote>getLTP(String exchange, String ... scripNames) throws KiteException, JSONException, IOException	{
+    	String[] instruments = new String[scripNames.length];
+    	
+    	int i = 0;
+    	for(String scripName : scripNames){
+    			instruments[i++] = exchange + ":" +scripName;
+    	}
+    	logger.debug("Querying for - " + scripNames.length + " scrips");
+    	
+    	Map<String, LTPQuote> zerodhaMap = kiteConnect.getLTP(instruments);
+    	Map<String, LTPQuote> resultMap = new HashMap<>();
+    	
+    	Iterator<String> keys = zerodhaMap.keySet().iterator();
+    	
+    	while(keys.hasNext())	{
+    		String prefixedName = keys.next();
+    		logger.debug("Retrieved LTP from zerodha - " +prefixedName);
+    		resultMap.put(prefixedName.replace("NSE:", ""), zerodhaMap.get(prefixedName));
+    		resultMap.put(prefixedName.replace("NFO:", ""), zerodhaMap.get(prefixedName));
+    		
+    	}
+    	logger.debug("Retrieved LTP for - " + resultMap.size());
+		return resultMap;	
+	}
+    
     public Map<String,LTPQuote>getLTP(String ... scripNames) throws KiteException, JSONException, IOException	{
     	String[] instruments = new String[scripNames.length];
     	

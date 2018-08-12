@@ -53,30 +53,46 @@ public class AutoOrderManager {
 
 		readParameters(args);
 		
-		try {
-			int interval = 5;
-			if(parametersMap.get(RUN_EVERY_X_MINUTES_PARAMETER) != null){
-				interval = Integer.valueOf(parametersMap.get(RUN_EVERY_X_MINUTES_PARAMETER));
+
+		int interval = 5;
+		if(parametersMap.get(RUN_EVERY_X_MINUTES_PARAMETER) != null){
+			interval = Integer.valueOf(parametersMap.get(RUN_EVERY_X_MINUTES_PARAMETER));
+		}
+		logger.debug("Going to run every - " + interval + " minutes");
+		
+		int noOfIterations = 1;
+		if(parametersMap.get(REPEAT_RUNS_PARAMETER) != null){
+			int itr = Integer.valueOf(parametersMap.get(REPEAT_RUNS_PARAMETER));
+			noOfIterations = itr;
+			if(itr == -1)	{
+				noOfIterations = Integer.MAX_VALUE;
 			}
-			logger.debug("Going to run every - " + interval + " minutes");
+		}
+		logger.debug("Going to run - " + noOfIterations + " iterations");
+		
+		int runCount = 0; 
+		while(runCount++ < noOfIterations)	{
+			try {
 			
-			int noOfIterations = 1;
-			if(parametersMap.get(REPEAT_RUNS_PARAMETER) != null){
-				int itr = Integer.valueOf(parametersMap.get(REPEAT_RUNS_PARAMETER));
-				noOfIterations = itr;
-				if(itr == -1)	{
-					noOfIterations = Integer.MAX_VALUE;
-				}
-			}
-			logger.debug("Going to run - " + noOfIterations + " iterations");
-			
-			int runCount = 0; 
-			while(runCount++ < noOfIterations)	{
-				
 				logger.debug("Running iteration - " + runCount);
 				
 				Calendar calendar = Calendar.getInstance();
 				int hours = calendar.get(Calendar.HOUR_OF_DAY);
+				
+				//Check if time is less than 9:15 AM, dont proceed.
+				//bracket orders cannot be placed before 9:15 AM
+				
+				if(hours < 9){
+					logger.debug("Sleeping as time is less than 9:00 AM");
+					Thread.sleep(1000 * 60 * interval);
+					continue;
+				}else if (hours == 9){
+					if(calendar.get(Calendar.MINUTE) < 15)	{
+						logger.debug("Sleeping as time is less than 9:15 AM");
+						Thread.sleep(1000 * 60 * interval);
+						continue;
+					}
+				}
 				
 				if(parametersMap.get(STOP_AFTER_HOURS_PARAMETER)!= null && hours >= Integer.valueOf(parametersMap.get(STOP_AFTER_HOURS_PARAMETER)))	{
 					logger.info("Breaking because current hour [" + hours + "]" + " is >= " +  "[" + parametersMap.get(STOP_AFTER_HOURS_PARAMETER) + "]");
@@ -100,12 +116,17 @@ public class AutoOrderManager {
 					
 				Thread.sleep(1000 * 60 * interval);
 				
+			} catch (Exception | KiteException e) {
+				
+				logger.error("Exception occurred" , e);
+				try {
+					Thread.sleep(1000 * 60 * interval);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
-		} catch (Exception | KiteException e) {
-			
-			logger.error("Exception occurred" , e);
 		}
-		
 	}
 
 
@@ -241,7 +262,6 @@ public class AutoOrderManager {
 							actualSL = stopLossPrice - datrValue;
 						}
 						
-						
 						//logic to understand number of orders to be placed
 						List<Float> profitRatioList = new ArrayList<>();
 						
@@ -274,8 +294,6 @@ public class AutoOrderManager {
 							kiteHelper.placeBracketOrder(csvReader.getValue(scripName, Constants.FIELD_NAME_EXCHANGE), 
 									scripName, entryPrice, quantityPerOrder, 
 									stoploss, target, csvReader.getValue(scripName, Constants.FIELD_NAME_TRADE_TYPE));
-						    
-							
 							try {
 								Thread.sleep(1000);
 							} catch (InterruptedException e) {
@@ -283,10 +301,7 @@ public class AutoOrderManager {
 								e.printStackTrace();
 							}
 						}
-						
 						ApplicationCache.getInstance().put(Constants.CACHE_GROUP_INTRADAY_ORDERS, scripName);
-						
-						
 					}
 				} 
 			}

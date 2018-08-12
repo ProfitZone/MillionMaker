@@ -3,8 +3,10 @@ package com.million.csv;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.million.common.Constants;
@@ -62,6 +64,27 @@ public class CSVReader {
 	}
 	
 	/**
+	 * It return all the scrip names from the file.
+	 * 
+	 * @return
+	 */
+	public String[] getAllScripsByFieldName(String fieldName,String fieldValue)	{
+		
+		List<String> nameList = new ArrayList<>();
+		
+		while(this.dataMap.keySet().iterator().hasNext())	{
+			
+			String name = this.dataMap.keySet().iterator().next();
+			
+			if(fieldValue.equalsIgnoreCase(this.getValue(name, fieldName)))	{
+				nameList.add(name);
+			}
+		}
+		return nameList.toArray(new String[0]);
+		
+	}
+	
+	/**
 	 * Returns specified field for the scrip.
 	 * 
 	 * @param scripName
@@ -87,10 +110,10 @@ public class CSVReader {
 	 */
 	public int getIntValue(String scripName , String fieldName) {
 		
-		if(this.dataMap.get(scripName) == null)	{
+		if(this.getValue(scripName, fieldName) == null)	{
 			return 0;
 		}
-		return Integer.valueOf(this.dataMap.get(scripName).get(fieldName));
+		return Integer.valueOf(this.getValue(scripName, fieldName));
 	}
 	
 	/**
@@ -102,11 +125,11 @@ public class CSVReader {
 	 */
 	public float getFloatValue(String scripName , String fieldName) {
 		
-		if(this.dataMap.get(scripName) == null)	{
+		if(this.getValue(scripName, fieldName) == null)	{
 			return 0;
 		}
 		
-		return Float.valueOf(this.dataMap.get(scripName).get(fieldName));
+		return Float.valueOf(this.getValue(scripName, fieldName));
 		
 	}
 
