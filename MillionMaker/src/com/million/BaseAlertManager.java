@@ -52,26 +52,26 @@ public class BaseAlertManager {
 
 		readParameters(args);
 		
-		try {
-			int interval = 5;
-			if(parametersMap.get(RUN_EVERY_X_MINUTES_PARAMETER) != null){
-				interval = Integer.valueOf(parametersMap.get(RUN_EVERY_X_MINUTES_PARAMETER));
+		int interval = 5;
+		if(parametersMap.get(RUN_EVERY_X_MINUTES_PARAMETER) != null){
+			interval = Integer.valueOf(parametersMap.get(RUN_EVERY_X_MINUTES_PARAMETER));
+		}
+		logger.debug("Going to run every - " + interval + " minutes");
+		
+		int noOfIterations = 1;
+		if(parametersMap.get(REPEAT_RUNS_PARAMETER) != null){
+			int itr = Integer.valueOf(parametersMap.get(REPEAT_RUNS_PARAMETER));
+			noOfIterations = itr;
+			if(itr == -1)	{
+				noOfIterations = Integer.MAX_VALUE;
 			}
-			logger.debug("Going to run every - " + interval + " minutes");
+		}
+		logger.debug("Going to run - " + noOfIterations + " iterations");
+		
+		int runCount = 0; 
+		while(runCount++ < noOfIterations)	{
 			
-			int noOfIterations = 1;
-			if(parametersMap.get(REPEAT_RUNS_PARAMETER) != null){
-				int itr = Integer.valueOf(parametersMap.get(REPEAT_RUNS_PARAMETER));
-				noOfIterations = itr;
-				if(itr == -1)	{
-					noOfIterations = Integer.MAX_VALUE;
-				}
-			}
-			logger.debug("Going to run - " + noOfIterations + " iterations");
-			
-			int runCount = 0; 
-			while(runCount++ < noOfIterations)	{
-				
+			try	{
 				logger.debug("Running iteration - " + runCount);
 				
 				Calendar calendar = Calendar.getInstance();
@@ -95,15 +95,13 @@ public class BaseAlertManager {
 				if(runCount >= noOfIterations)	{
 					break;
 				}
-					
 				Thread.sleep(1000 * 60 * interval);
 				
+			}catch (Exception e) {
+				
+				logger.error("Exception occurred" , e);
 			}
-		} catch (Exception e) {
-			
-			logger.error("Exception occurred" , e);
 		}
-		
 	}
 
 

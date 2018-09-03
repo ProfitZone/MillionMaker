@@ -287,13 +287,25 @@ public class AutoOrderManager {
 							float stoploss =  Float.valueOf(new DecimalFormat("#.##").format( Math.abs(entryPrice - actualSL)));
 							float target = Float.valueOf(new DecimalFormat("#.##").format(profitRatio * Math.abs(entryPrice - actualSL)));
 							
-							logger.info("placing order for [" + scripName +"] , at price [" + entryPrice +"] , quantity [" 
+							logger.info("placing [" + csvReader.getValue(scripName, Constants.FIELD_NAME_TRADE_TYPE) 
+								+ "]  order for [" + scripName +"] , at price [" + entryPrice +"] , quantity [" 
 									+ quantityPerOrder +"] stoploss [" +stoploss +"] target [" + target +"]");
 							
+							//in case action is sell
+							float actualTarget = entryPrice - target;
+							float actualStoploss = entryPrice + stoploss;
 							
-							kiteHelper.placeBracketOrder(csvReader.getValue(scripName, Constants.FIELD_NAME_EXCHANGE), 
+							if(Constants.ACTION_TYPE_BUY.equals(csvReader.getValue(scripName, Constants.FIELD_NAME_TRADE_TYPE)))	{
+								 actualTarget = entryPrice + target;
+								 actualStoploss = entryPrice - stoploss;
+							}
+							logger.info("placing [" + csvReader.getValue(scripName, Constants.FIELD_NAME_TRADE_TYPE) 
+							+ "]  order for [" + scripName +"] , at price [" + entryPrice +"] , quantity [" 
+								+ quantityPerOrder +"] stoploss [" +actualStoploss +"] target [" + actualTarget +"]");
+							
+							/*kiteHelper.placeBracketOrder(csvReader.getValue(scripName, Constants.FIELD_NAME_EXCHANGE), 
 									scripName, entryPrice, quantityPerOrder, 
-									stoploss, target, csvReader.getValue(scripName, Constants.FIELD_NAME_TRADE_TYPE));
+									stoploss, target, csvReader.getValue(scripName, Constants.FIELD_NAME_TRADE_TYPE));*/
 							try {
 								Thread.sleep(1000);
 							} catch (InterruptedException e) {
