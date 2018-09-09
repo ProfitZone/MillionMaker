@@ -16,6 +16,15 @@ public class HelperUtil {
 		return simpleDateFormat.format(curDate);
 	}
 	
+	public static String getStringDateTime()	{
+		
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MMM-YY HH:mm:ss");
+		
+		Date curDate = new Date();
+		
+		return simpleDateFormat.format(curDate);
+	}
+	
 	public static String getRoundedNumber(float number){
 		
 		DecimalFormat df = new DecimalFormat("#.##");

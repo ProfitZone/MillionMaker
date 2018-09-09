@@ -142,7 +142,7 @@ public class BaseAlertManager {
 		String files = parametersMap.get(INPUT_FILE_PARAMETER);
 		
 		CSVWritter trackingSheet = new CSVWritter(WealthConfig.getInstance().getProperty("HOME_DIR") 
-				+ "/Records/" , "Onnea-records.csv", "DATE","STOCK-NAME","PRICE","TYPE");
+				+ "/Records/" , "Onnea-records-" + HelperUtil.getStringDate() + ".csv", "DATE","STOCK-NAME","PRICE","TYPE");
 				
 		String writeInCSV = System.getProperty(Constants.WRITE_IN_CSV);
 		
@@ -224,7 +224,7 @@ public class BaseAlertManager {
 						loggerMessage = MessageFormat.format(loggerMessage, quote.lastPrice,new DecimalFormat("#.##").format(recoPrice));
 						logger.info(loggerMessage);
 						
-						trackingSheet.write(HelperUtil.getStringDate(),scripName,""+recoPrice,csvReader.getValue(scripName, Constants.FIELD_NAME_OTA_TRADE_TYPE));
+						trackingSheet.write(HelperUtil.getStringDateTime(),scripName,""+recoPrice,csvReader.getValue(scripName, Constants.FIELD_NAME_OTA_TRADE_TYPE));
 						
 						ApplicationCache.getInstance().put(Constants.CACHE_GROUP_LOG_MESSAGES, loggerMessage);
 					}

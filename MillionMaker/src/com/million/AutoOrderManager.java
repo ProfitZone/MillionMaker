@@ -16,8 +16,10 @@ import com.million.cache.ApplicationCache;
 import com.million.common.Constants;
 import com.million.config.WealthConfig;
 import com.million.csv.CSVReader;
+import com.million.csv.CSVWritter;
 import com.million.kite.login.KiteHelper;
 import com.million.kite.login.TokenManager;
+import com.onnea.million.util.HelperUtil;
 import com.zerodhatech.kiteconnect.kitehttp.exceptions.KiteException;
 import com.zerodhatech.models.LTPQuote;
 import com.zerodhatech.models.Order;
@@ -174,6 +176,9 @@ public class AutoOrderManager {
 			fileNames[0] = files;
 		}
 		
+		CSVWritter trackingSheet = new CSVWritter(WealthConfig.getInstance().getProperty("HOME_DIR") 
+				+ "/Records/" , "Onnea-records-intraday" + HelperUtil.getStringDate() + ".csv", "DATE","STOCK-NAME","ENTRY-PRICE","QUANTITY","TYPE","TARGET-PRICE","STOPLOSS");
+		
 		for(String fileName : fileNames)	{
 			
 			CSVReader csvReader = new CSVReader(fileName);
@@ -302,6 +307,10 @@ public class AutoOrderManager {
 							logger.info("placing [" + csvReader.getValue(scripName, Constants.FIELD_NAME_TRADE_TYPE) 
 							+ "]  order for [" + scripName +"] , at price [" + entryPrice +"] , quantity [" 
 								+ quantityPerOrder +"] stoploss [" +actualStoploss +"] target [" + actualTarget +"]");
+							
+							trackingSheet.write(HelperUtil.getStringDateTime(),scripName,csvReader.getValue(scripName, Constants.FIELD_NAME_TRADE_TYPE),
+									HelperUtil.getRoundedNumber(entryPrice),HelperUtil.getRoundedNumber(quantityPerOrder),
+									HelperUtil.getRoundedNumber(actualTarget), HelperUtil.getRoundedNumber(actualStoploss));
 							
 							/*kiteHelper.placeBracketOrder(csvReader.getValue(scripName, Constants.FIELD_NAME_EXCHANGE), 
 									scripName, entryPrice, quantityPerOrder, 
