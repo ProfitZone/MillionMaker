@@ -177,7 +177,7 @@ public class AutoOrderManager {
 		}
 		
 		CSVWritter trackingSheet = new CSVWritter(WealthConfig.getInstance().getProperty("HOME_DIR") 
-				+ "/Records/" , "Onnea-records-intraday" + HelperUtil.getStringDate() + ".csv", "DATE","STOCK-NAME","ENTRY-PRICE","QUANTITY","TYPE","TARGET-PRICE","STOPLOSS");
+				+ "/Records/" , "Onnea-records-intraday" + HelperUtil.getStringDate() + ".csv", "DATE","STOCK-NAME","ENTRY-PRICE","QUANTITY","TYPE","TARGET-PRICE","STOPLOSS","REMARKS");
 		
 		for(String fileName : fileNames)	{
 			
