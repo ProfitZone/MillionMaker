@@ -136,7 +136,7 @@ public class BaseAlertManager {
 		
 	}
 
-	public static void checkAndAlert() throws IOException {
+	public static void checkAndAlert() throws Exception {
 		
 		//handle more than one file in input
 		String files = parametersMap.get(INPUT_FILE_PARAMETER);
@@ -173,7 +173,7 @@ public class BaseAlertManager {
 			} catch (Exception e) {
 				e.printStackTrace();
 				logger.error("Exception occured ", e);
-				System.exit(-1);
+				//System.exit(-1);
 			} catch (KiteException e) {
 				e.printStackTrace();
 				logger.error("Exception occured ", e);
