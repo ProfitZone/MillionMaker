@@ -123,11 +123,16 @@ public class KiteHelper {
     	
     	while(keys.hasNext())	{
     		String prefixedName = keys.next();
-    		logger.debug("Retrieved LTP from zerodha - " +prefixedName);
-    		resultMap.put(prefixedName.replace("NSE:", ""), zerodhaMap.get(prefixedName));
-    		resultMap.put(prefixedName.replace("NFO:", ""), zerodhaMap.get(prefixedName));
+    		logger.debug("Retrieved LTP from zerodha - " +prefixedName + " - " + zerodhaMap.get(prefixedName).lastPrice);
+    		
+    		if(prefixedName.contains("NSE"))	{
+    			resultMap.put(prefixedName.replace("NSE:", ""), zerodhaMap.get(prefixedName));
+    		}else	{
+    			resultMap.put(prefixedName.replace("NFO:", ""), zerodhaMap.get(prefixedName));
+    		}
     		
     	}
+    	logger.debug( resultMap);
     	logger.debug("Retrieved LTP for - " + resultMap.size());
 		return resultMap;	
 	}
@@ -225,7 +230,7 @@ public class KiteHelper {
 	public static void main(String[] args) throws FileNotFoundException, IOException, KiteException {
 		KiteHelper kiteHelper = new KiteHelper();
 		
-		kiteHelper.placeBracketOrder("NSE","TATAMTRDVR",141.7f,588,0.85f,1.7f,"SELL");
+		kiteHelper.getLTP(new String[] {"TCS"});
 		
 		System.out.println("Done");
 	}

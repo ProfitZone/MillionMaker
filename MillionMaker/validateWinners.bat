@@ -17,4 +17,4 @@ java -DWriteInCSV=false com.million.BaseAlertManager -inputFile=C:/Users/Jayande
 
 java -DWriteInCSV=false com.million.BaseAlertManager -inputFile=C:/Users/Jayander/Dropbox/Million/Winners/OTA-WATCHLIST-IIT.csv -repeatRuns=1 -stopAfterHours=23 -runEveryXMinutes=1 -alertRange=1
 
-REM java -DWriteInCSV=false com.million.BaseAlertManager -inputFile=C:/Users/Jayander/Dropbox/Million/Winners/OTA-WATCHLIST.csv -repeatRuns=1 -stopAfterHours=23 -runEveryXMinutes=1 -alertRange=2
+java -DWriteInCSV=false com.million.BaseAlertManager -inputFile=C:/Users/Jayander/Dropbox/Million/Winners/OTA-WATCHLIST-EWIT.csv -repeatRuns=1 -stopAfterHours=23 -runEveryXMinutes=1 -alertRange=2
