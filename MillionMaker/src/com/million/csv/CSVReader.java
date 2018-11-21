@@ -40,10 +40,13 @@ public class CSVReader {
 				Map<String, String> valueMap =  new HashMap<>();
 				
 				for(int i=0; i<fields.length; i++)	{
+					
 					valueMap.put(headers[i], fields[i]);
 				}
 				
-				dataMap.put(valueMap.get(Constants.FIELD_NAME_SCRIP_NAME), valueMap);
+				if(valueMap.get(Constants.FIELD_NAME_SCRIP_NAME) != null)	{
+					dataMap.put(valueMap.get(Constants.FIELD_NAME_SCRIP_NAME), valueMap);
+				}
 				
 			}
 			

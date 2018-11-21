@@ -172,21 +172,25 @@ public class BaseAlertManager {
 			
 			} catch (Exception e) {
 				e.printStackTrace();
-				logger.error("Exception occured ", e);
+				logger.debug("Exception occured ", e);
 				//System.exit(-1);
 			} catch (KiteException e) {
 				e.printStackTrace();
-				logger.error("Exception occured ", e);
+				logger.debug("Exception occured ", e);
 				try {
 					TokenManager.main(null);
 				} catch (Exception e1) {
-					logger.error("Request token has expired");
+					logger.debug("Request token has expired");
 				} catch (KiteException e1) {
-					logger.error("Request token has expired");
+					logger.debug("Request token has expired");
 				}
 			}
 			
 			for(String scripName : csvReader.getAllScrips())	{
+				
+				if(null == scripName)	{
+					continue;
+				}
 				
 				LTPQuote quote = LTPMap.get(scripName);
 				

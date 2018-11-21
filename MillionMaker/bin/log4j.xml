@@ -13,7 +13,7 @@
 	<appender name="millionFile" class="org.apache.log4j.DailyRollingFileAppender">
 	    <param name="append" value="true" />
 	    <param name="DatePattern" value="'.'dd-MM-yyyy" />
-	    <param name="file" value="C:/Users/Jayander/Dropbox/Million/logs/million.log" />
+	    <param name="file" value="C:/Users/admin/Dropbox/Million/logs/million.log" />
 	    <layout class="org.apache.log4j.PatternLayout">
 		<param name="ConversionPattern"
 			value="%d{dd-MM-yyyy HH:mm:ss} %-5p %c{1} - %m%n" />
@@ -23,7 +23,7 @@
 	<appender name="millionFileSwing" class="org.apache.log4j.DailyRollingFileAppender">
 	    <param name="append" value="true" />
 	    <param name="DatePattern" value="'.'dd-MM-yyyy" />
-	    <param name="file" value="C:/Users/Jayander/Dropbox/Million/logs/millionSwing.log" />
+	    <param name="file" value="C:/Users/admin/Dropbox/Million/logs/millionSwing.log" />
 	    <layout class="org.apache.log4j.PatternLayout">
 		<param name="ConversionPattern"
 			value="%d{dd-MM-yyyy HH:mm:ss} %-5p %c{1} - %m%n" />
@@ -33,7 +33,7 @@
 	<appender name="millionFileAutoOrder" class="org.apache.log4j.DailyRollingFileAppender">
 	    <param name="append" value="true" />
 	    <param name="DatePattern" value="'.'dd-MM-yyyy" />
-	    <param name="file" value="C:/Users/Jayander/Dropbox/Million/logs/autoOrder.log" />
+	    <param name="file" value="C:/Users/admin/Dropbox/Million/logs/autoOrder.log" />
 	    <layout class="org.apache.log4j.PatternLayout">
 		<param name="ConversionPattern"
 			value="%d{dd-MM-yyyy HH:mm:ss} %-5p %c{1} - %m%n" />
@@ -43,7 +43,7 @@
 	<appender name="debugLog" class="org.apache.log4j.DailyRollingFileAppender">
 	    <param name="append" value="true" />
 	    <param name="DatePattern" value="'.'dd-MM-yyyy" />
-	    <param name="file" value="C:/Users/Jayander/Dropbox/Million/logs/millionDebug.log" />
+	    <param name="file" value="C:/Users/admin/Dropbox/Million/logs/millionDebug.log" />
 	    <layout class="org.apache.log4j.PatternLayout">
 		<param name="ConversionPattern"
 			value="%d{dd-MM-yyyy HH:mm:ss} %-5p %c{1} - %m%n" />
@@ -53,7 +53,7 @@
 	<appender name="catchAllLog" class="org.apache.log4j.DailyRollingFileAppender">
 	    <param name="append" value="true" />
 	    <param name="DatePattern" value="'.'dd-MM-yyyy" />
-	    <param name="file" value="C:/Users/Jayander/Dropbox/Million/logs/catchAllLog.log" />
+	    <param name="file" value="C:/Users/admin/Dropbox/Million/logs/catchAllLog.log" />
 	    <layout class="org.apache.log4j.PatternLayout">
 		<param name="ConversionPattern"
 			value="%d{dd-MM-yyyy HH:mm:ss} %-5p %c{1} - %m%n" />
