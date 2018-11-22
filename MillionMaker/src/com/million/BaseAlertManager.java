@@ -99,7 +99,7 @@ public class BaseAlertManager {
 				
 			}catch (Exception e) {
 				
-				logger.error("Exception occurred" , e);
+				logger.debug("Exception occurred" , e);
 			}
 		}
 	}
