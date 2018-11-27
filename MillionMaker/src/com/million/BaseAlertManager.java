@@ -171,11 +171,11 @@ public class BaseAlertManager {
 				LTPMap = kiteHelper.getLTP(csvReader.getAllScrips());
 			
 			} catch (Exception e) {
-				e.printStackTrace();
+				//e.printStackTrace();
 				logger.debug("Exception occured ", e);
 				//System.exit(-1);
 			} catch (KiteException e) {
-				e.printStackTrace();
+				//e.printStackTrace();
 				logger.debug("Exception occured ", e);
 				try {
 					TokenManager.main(null);
