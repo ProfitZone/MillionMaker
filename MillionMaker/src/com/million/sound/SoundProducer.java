@@ -8,7 +8,7 @@ import java.net.URL;
 public class SoundProducer {
 
 		
-	public void play() throws MalformedURLException, InterruptedException	{
+	public static void play() throws MalformedURLException, InterruptedException	{
 	  URL url = new URL("file:sound.wav");
 	  AudioClip clip = Applet.newAudioClip(url);
 	  clip.play();
