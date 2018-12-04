@@ -17,6 +17,7 @@ import com.million.csv.CSVReader;
 import com.million.csv.CSVWritter;
 import com.million.kite.login.KiteHelper;
 import com.million.kite.login.TokenManager;
+import com.million.sound.SoundProducer;
 import com.onnea.million.util.HelperUtil;
 import com.zerodhatech.kiteconnect.kitehttp.exceptions.KiteException;
 import com.zerodhatech.models.LTPQuote;
@@ -230,6 +231,7 @@ public class BaseAlertManager {
 						
 						trackingSheet.write(HelperUtil.getStringDateTime(),scripName,""+recoPrice,csvReader.getValue(scripName, Constants.FIELD_NAME_OTA_TRADE_TYPE));
 						
+						SoundProducer.play();
 						ApplicationCache.getInstance().put(Constants.CACHE_GROUP_LOG_MESSAGES, loggerMessage);
 					}
 				}
