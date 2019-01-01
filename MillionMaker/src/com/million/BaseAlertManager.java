@@ -46,6 +46,8 @@ public class BaseAlertManager {
 	
 	private static String ALERT_RANGE_PARAMETER = "alertRange";
 	
+	private static int stupidCounter = 1;
+	
 	
 	private static Map<String, String> parametersMap= new HashMap<String, String>();
 	
@@ -187,6 +189,10 @@ public class BaseAlertManager {
 				}
 			}
 			
+			if(stupidCounter%10 == 1) {
+				logger.info("File - " + fileName + " is fine.");
+			}
+			
 			for(String scripName : csvReader.getAllScrips())	{
 				
 				if(null == scripName)	{
@@ -245,6 +251,7 @@ public class BaseAlertManager {
 				e.printStackTrace();
 			}
 		}
+		stupidCounter++;
 	}
 
 	private static boolean isLTPWithinRange(double lastPrice, double recoPrice) {
